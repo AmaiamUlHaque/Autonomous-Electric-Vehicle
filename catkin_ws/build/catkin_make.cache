@@ -1,2 +1,0 @@
-f1tenth_simulator:joystick_drivers/joy:joystick_drivers/joystick_drivers:joystick_drivers/ps3joy:joystick_drivers/spacenav_node:joystick_drivers/vesc/vesc:joystick_drivers/vesc/vesc_ackermann:joystick_drivers/vesc/vesc_driver:joystick_drivers/vesc/vesc_msgs:ros-imu-bno055:test
--DCATKIN_DEVEL_PREFIX=/home/caruser/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/caruser/catkin_ws/install -G Unix Makefiles
