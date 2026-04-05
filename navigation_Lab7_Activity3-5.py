@@ -116,19 +116,48 @@ class WallFollow:
 
 
 		self.dlr = self.dl-self.dr # error
+
 		
-		if(abs(self.dlr) < 0.01):
+    
+
+		error_proportional = min(abs(self.dr/self.dl) , abs(self.dl/self.dr))
+		ratio = 0.1 
+		# steering ratio. more error = allow more steering physically possible
+
+		# # lINEAR RELATION
+		# m = -0.95
+		# b = 1
+		# ratio = m*error_proportional+b
+
+		# # EXPONENTIAL RELATION
+		# b = -12/11*math.log(0.05)
+		# a = math.exp(b/12)
+		# ratio = a*math.exp(-b*error_proportional)
+		 
+
+		# USE IF THE LINEAR/EXPONENTIAL RELATION ISNT WORKING
+		if (error_proportional >= 11/12):
+			ratio = 0.05
+		# elif (error_proportional >= 5/6):
+		# 	ratio = 0.1
+		# elif (error_proportional >= 1/3):
+		# 	ratio = 0.25
+		# elif (error_proportional >= 1/6):
+		# 	ratio = 0.6
+		else:
+			ratio = 0.75
+			
+		if(abs(self.dlr) < 0.01): #0.01m = 1cm
 			self.dlr_error= 0
+
 		else: 
 			self.dlr_error= self.dlr
 
-		self.dlr_error = self.dlr
+		# self.dlr_error = self.dlr
 		self.dlr_dot = -self.vel*math.sin(self.alpha_l)-self.vel*math.sin(self.alpha_r)
 
-
-
 		# Compute the steering angle command to maintain the vehicle in the middle of left and and right walls
-		self.steering_angle = math.atan2(self.kp*self.dlr_error*self.length+self.kd*self.dlr_dot*self.length,(self.vel**2)*(math.cos(self.alpha_r)+math.cos(self.alpha_l)))
+		self.steering_angle = ratio*math.atan2(self.kp*self.dlr_error*self.length+self.kd*self.dlr_dot*self.length,(self.vel**2)*(math.cos(self.alpha_r)+math.cos(self.alpha_l)))
 		self.steering_angle = np.clip(self.steering_angle,-self.steering_angle_max,self.steering_angle_max)
 		
  
