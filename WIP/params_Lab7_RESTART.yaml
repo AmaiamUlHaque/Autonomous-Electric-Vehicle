@@ -11,7 +11,7 @@ buffer_length: 5
 
 # Limits on the speed and steering angle
 max_speed: 1.0 #  meters/second --> UPDATED FROM AVENUE POST
-max_steering_angle: 0.4189 # radians
+max_steering_angle: 0.4189 # radians ORIGINALLY 0.4189
 max_accel: 2.5 #7.51 # meters/second^2
 max_decel: 2.5 #8.26 # meters/second^2
 max_steering_vel: 3.2 # radians/second
@@ -157,9 +157,27 @@ angle_ar: rad(160*pi/180)
 n_pts_l: 100
 n_pts_r: 100
 tau: 0.1 
+
+# kd and kp params based off which activity
+
+# # Activity 4
+# k_d: 6.25
+# k_p: 4.5
+
+# # Activity 5
+# k_d: 4
+# k_p: 3
+
+# Activity 7
 k_d: 6.25
 k_p: 4.5
-vehicle_velocity: 2.0 
+
+# # Activity 8
+# k_d: 4
+# k_p: 3
+
+
+vehicle_velocity: 1.0 
 turn_velocity: 0.8
 velocity_zero: 0.3
 

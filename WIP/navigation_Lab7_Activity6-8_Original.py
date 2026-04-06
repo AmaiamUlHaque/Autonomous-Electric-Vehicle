@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 from __future__ import print_function
 import sys
 import math
@@ -23,21 +22,35 @@ class GapBarrier:
         #Topics & Subs, Pubs
         # Read the algorithm parameter paramters form params.yaml
         # ...
+        
+        # Load parameters from params.yaml (no default values)
         self.wheelbase = rospy.get_param("~wheelbase")
         self.max_speed = rospy.get_param("~max_speed")
         self.max_steering_angle = rospy.get_param("~max_steering_angle")
+        
+        # Line-following controller parameters
         self.k_p = rospy.get_param("~k_p")
         self.k_d = rospy.get_param("~k_d")
+        
+        # Gap finding parameters
         self.safe_distance = rospy.get_param("~safe_distance")
         self.right_beam_angle = rospy.get_param("~right_beam_angle")
         self.left_beam_angle = rospy.get_param("~left_beam_angle")
+        
+        # Velocity control parameters
         self.vehicle_velocity = rospy.get_param("~vehicle_velocity")
         self.stop_distance = rospy.get_param("~stop_distance")
         self.stop_distance_decay = rospy.get_param("~stop_distance_decay")
         self.heading_beam_angle = rospy.get_param("~heading_beam_angle")
+        
+        # LiDAR parameters
         self.max_lidar_range = rospy.get_param("~scan_range")
+        
+        # FOV parameters (70 degrees each side = 140 deg total)
         self.fov_angle = math.radians(140)  # +-70 degrees
         self.epsilon = 1e-6  # Small number for constraints
+        
+        # Free space weighting - same as max lidar range
         self.free_space_max_weight = self.max_lidar_range  # 12.0 meters
         
         # Topic names
@@ -64,12 +77,14 @@ class GapBarrier:
         self.steering_angle = 0.0
         self.vel_command = 0.0
         
+        # LiDAR data storage
         self.last_ranges = None
         self.angle_min = None
         self.angle_max = None
         self.angle_increment = None
         
         # ADD PRINT MESSAGES FOR VALIDATION PURPOSES
+        # ...ooopsies, im too lazy, ill do it soon?
         print("GapBarrier Node Initialized")
         print("  k_p: " + str(self.k_p) + ", k_d: " + str(self.k_d))
         print("  max_speed: " + str(self.max_speed) + ", max_steering: " + str(self.max_steering_angle))
@@ -95,7 +110,8 @@ class GapBarrier:
         left_fov_angle = forward_angle + half_fov
         right_fov_angle = forward_angle - half_fov
         
-        # Find indices
+        # Find indices (LiDAR angle_min is usually -pi or 0 depending on config)
+        # Assuming angle_min = -pi, angle_max = pi
         left_idx = int((left_fov_angle - angle_min) / angle_increment)
         right_idx = int((right_fov_angle - angle_min) / angle_increment)
         
@@ -505,16 +521,20 @@ class GapBarrier:
         ranges = np.array(data.ranges)
         
         # Pre-process LiDAR data as necessary
+        # Step 1: Preprocess LiDAR data (FOV and safe distance)
+        # Returns: proc_ranges (for gap finding), free_space_weights (for theta_des), and indices
         proc_ranges, free_space_weights, right_idx, left_idx = self.preprocess_lidar(
             ranges, self.angle_min, self.angle_increment
         )
         # ... 
         
         # Find the widest gap in front of vehicle
+        # Step 2: Find the widest gap in front of vehicle
         gap_start, gap_end = self.find_max_gap(proc_ranges)
         # ...
         
         # Find the Best Direction of Travel using weighted average with free space weights
+        # Step 3: Find best direction of travel
         theta_des, best_point = self.find_best_point(
             gap_start, gap_end, proc_ranges, free_space_weights,
             self.angle_min, self.angle_increment, right_idx
@@ -522,6 +542,7 @@ class GapBarrier:
         # ...
 
         # Set up the QP for finding the two parallel barrier lines
+        # Step 4: Get obstacle points for QP
         left_points, right_points = self.get_obstacle_points(
             ranges, self.angle_min, self.angle_increment, 
             theta_des, right_idx, left_idx
@@ -529,14 +550,17 @@ class GapBarrier:
         # ...
 
         # Solve the QP problem to find the barrier lines parameters w,b
+        # Step 5: Solve QP to find barrier lines
         w, s_val = self.solve_qp_barriers(left_points, right_points)
         # ...
 
         # Compute the values of the variables needed for the implementation of feedback linearizing+PD controller
+        # Step 6: Compute barrier distances and angles
         d_l, d_r, d_lr_dot, cos_alpha_l, cos_alpha_r = self.compute_barrier_distances_and_angles(w, s_val)
         # ...
         
         # Compute the steering angle command
+        # Step 7: Compute steering command
         self.steering_angle = self.compute_steering_command(
             d_lr_dot, cos_alpha_l, cos_alpha_r, d_l, d_r
         )
@@ -544,6 +568,7 @@ class GapBarrier:
         # ...
             
         # Find the closest obstacle point in a narrow field of view in front of the vehicle and compute the velocity command accordingly    
+        # Step 8: Compute velocity command
         self.vel_command = self.compute_velocity_command(
             ranges, self.angle_min, self.angle_increment, theta_des
         )
