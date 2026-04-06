@@ -190,14 +190,14 @@ class GapBarrier:
         w = solution[0:2]
         b = solution[2]
 
-        w_r = w / (b - 1.0 + epsilon)  # added a small esp to avoid division by zero
-        w_l = w / (b + 1.0 + epsilon)
+        wr = w / (b - 1.0 + epsilon)  # added a small esp to avoid division by zero
+        wl = w / (b + 1.0 + epsilon)
 
         # Compute the distance to the walls
-        d_l = 1.0 / math.sqrt(w_l[0]**2 + w_l[1]**2)
-        d_r = 1.0 / math.sqrt(w_r[0]**2 + w_r[1]**2)
+        dl = 1.0 / math.sqrt(wl[0]**2 + wl[1]**2)
+        dr = 1.0 / math.sqrt(wr[0]**2 + wr[1]**2)
         
-        return w_l, w_r, d_l, d_r
+        return wl, wr, dl, dr
      
     # ...
      
