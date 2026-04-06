@@ -21,7 +21,52 @@ from geometry_msgs.msg import Point
 class GapBarrier:
     def __init__(self):
         #Topics & Subs, Pubs
+        
         # Read the algorithm parameter paramters form params.yaml
+        lidarscan_topic = rospy.get_param('~scan_topic')
+        odom_topic = rospy.get_param('~odom_topic')
+        drive_topic = rospy.get_param('~drive_topic')
+
+        self.angle_al = float(rospy.get_param('~angle_al'))
+        self.angle_bl = float(rospy.get_param('~angle_bl'))
+        self.angle_ar = float(rospy.get_param('~angle_ar'))
+        self.angle_br = float(rospy.get_param('~angle_br'))
+        self.scan_beams = rospy.get_param('~scan_beams')
+        self.max_lidar_range = rospy.get_param('~scan_range')
+        self.length = rospy.get_param('~wheelbase')
+
+        self.steering_angle_max = rospy.get_param('~max_steering_angle') 
+        self.max_speed = rospy.get_param('~max_speed')
+        self.stop_distance = rospy.get_param('~stop_distance')
+        self.decay_const = rospy.get_param('~stop_distance_decay')
+        self.norm_speed = rospy.get_param('~vehicle_velocity')
+        self.vel = 0
+        self.kd = rospy.get_param('~k_d')
+        self.kp = rospy.get_param('~k_p')
+
+        self.alpha_l = 0.0
+        self.alpha_r = 0.0
+        self.beta_l = 0.0
+        self.beta_r = 0.0
+
+        self.al_index = 0
+        self.bl_index = 0
+        self.ar_index = 0
+        self.br_index = 0
+
+        self.theta_l = self.angle_bl-self.angle_al
+        self.theta_r = self.angle_ar-self.angle_br
+       
+
+        self.dlr = 0
+        self.dlr_error = 0
+        self.dl = 0
+        self.dr = 0
+        self.dlr_dot = 0 
+  
+        self.steering_angle = 0
+        self.closest_distance = 0
+        self.vel_command = 0
         # ...
 
         # Add your subscribers for LiDAR scan and Odomotery here
@@ -36,6 +81,9 @@ class GapBarrier:
         # ...
 
         # Initialize variables as needed 
+        self.x = 0 
+        self.y = 0
+        self.yaw = 0
         # TO INITIALISE
         front_angle = 
         angle_offset_a = 
@@ -239,12 +287,33 @@ class GapBarrier:
         # ...
 
         # Compute the values of the variables needed for the implementation of feedback linearizing+PD controller
-        # normalise wall vectors
+        
+        # EQUATIONS FOMRATTED CAUSE I KEEP FORGETTING...oopsies
+        # Eq. 1 --> ROC of wall dist
+            # dl_dot = v (dot) n_l = v * cos(alpha_l)
+            # dr_dot = v (dot) n_r = v * cos(alpha_r)
+        # Eq. 2 --> wall normal angles
+            # alpha_l = acos [0 -1] (dot) n_l
+            # alpha_r = acos [0  1] (dot) n_r
+        # Eq. 3 --> centering error and dynamics
+            # d_lr = dl-dr
+            # e_lr = dlr - dlr_des
+            # e_lr_dot = dl_dot - dr_dot = v(cos(alpha_l - alpha_r))
+        # Eq. 4 --> control law (ie linearise feedback + PD)
+            # u = - kp * e_lr - kd * e_lr_dot
+            # num = -L*u
+            # denom = v^2 * (cos(alpha_l - alpha_r)) + epsilon
+            # steering_angle = ( max_steering_angle / (pi/2) ) * atan(num/denom)
+        
+        
+        # normalise wall vectors --> n_l and n_r
         wl_norm = wl / np.linalg.norm(wl)
         wr_norm = wr / np.linalg.norm(wr)
         # distance to walls derivative
-        self.dl_dot = np.dot(vehicle_velocity, self.wl_norm) 
-        self.dr_dot = np.dot(vehicle_velocity, self.wr_norm)
+        self.dl_dot = np.dot(self.norm_speed, self.wl_norm) 
+        self.dr_dot = np.dot(self.norm_speed, self.wr_norm)
+        
+        # 
         # ...
         
         # Compute the steering angle command
