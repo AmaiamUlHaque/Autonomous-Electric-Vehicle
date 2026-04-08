@@ -100,7 +100,6 @@ class GapBarrier:
         print("  k_p: " + str(self.kp) + ", k_d: " + str(self.kd))
         print("  max_speed: " + str(self.max_speed) + ", max_steering: " + str(self.steering_angle_max))
         print("  safe_distance: " + str(self.safe_distance) + " stop_distance: " + str(self.stop_distance))
-        
         #...
 
 
