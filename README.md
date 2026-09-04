@@ -5,27 +5,13 @@ A comprehensive, semester-long engineering project to design, implement, and val
 <p align="center">
   <table>
     <tr>
-      <td align="center"><img src="./media/no obstacles - success.gif" alt="Autonomous Driving Demo without Obstacles" width="500"/><br/><sub>Smooth hallway traversal</sub></td>
-      <td align="center"><img src="./media/obstacles - success.gif" alt="Autonomous Driving Demo with Obstacles" width="500"/><br/><sub>Obstacle avoidance in motion</sub></td>
+      <td align="center"><img src="./media/no obstacles - success.gif" alt="Autonomous Driving Demo without Obstacles" width="750"/><br/><sub>Smooth hallway traversal</sub></td>
     </tr>
-  </table>
-</p>
-
-<!-- <p align="center">
-  <table>
     <tr>
-      <td align="center"><img src="./media/no obstacles - success.gif" alt="Autonomous Driving Demo without Obstacles" width="500"/><br/><sub>Smooth hallway traversal</sub></td>
-      <td align="center"><img src="./media/obstacles - success.gif" alt="Autonomous Driving Demo with Obstacles" width="500"/><br/><sub>Obstacle avoidance in motion</sub></td>
+      <td align="center"><img src="./media/obstacles - success.gif" alt="Autonomous Driving Demo with Obstacles" width="750"/><br/><sub>Obstacle avoidance in motion</sub></td>
     </tr>
   </table>
-</p> -->
-
-<!-- <p align="center">
-  <img src="./media/no obstacles - success.gif" alt="Autonomous Driving Demo without Obstacles" width="750"/>
 </p>
-<p align="center">
-      <img src="./media/obstacles - success.gif" alt="Autonomous Driving Demo with Obstacles" width="500"/>
-</p> -->
 
 
 *The MacAEV navigating autonomously using a virtual barriers algorithm with Quadratic Programming optimization, successfully following a hallway and avoiding obstacles.*
@@ -224,8 +210,8 @@ The project successfully achieved its major milestones, culminating in a fully f
 <p align="center">
   <table>
     <tr>
-      <td align="center"><img src="./media/no obstacles - success.gif" width="500"/><br/><sub>Smooth hallway traversal</sub></td>
-      <td align="center"><img src="./media/obstacles - success.gif" width="500"/><br/><sub>Obstacle avoidance in motion</sub></td>
+      <td align="center"><img src="./media/no obstacles - success.gif" width="300"/><br/><sub>Smooth hallway traversal</sub></td>
+      <td align="center"><img src="./media/obstacles - success.gif" width="300"/><br/><sub>Obstacle avoidance in motion</sub></td>
     </tr>
   </table>
 </p>
@@ -235,12 +221,12 @@ The project successfully achieved its major milestones, culminating in a fully f
 <p align="center">
   <table>
     <tr>
-      <td align="center"><img src="./media/no obstacles - quick to get to middle, failed corner turn.gif" width="500"/><br/><sub>Aggressive centering, corner overshoot</sub></td>
-      <td align="center"><img src="./media/no obstacles - slow big turn around corner.gif" width="500"/><br/><sub>Conservative wide-radius cornering</sub></td>
+      <td align="center"><img src="./media/no obstacles - quick to get to middle, failed corner turn.gif" width="300"/><br/><sub>Aggressive centering, corner overshoot</sub></td>
+      <td align="center"><img src="./media/no obstacles - slow big turn around corner.gif" width="300"/><br/><sub>Conservative wide-radius cornering</sub></td>
     </tr>
     <tr>
-      <td align="center"><img src="./media/obstacles - didnt make it around the corner.gif" width="500"/><br/><sub>Cornering failure with obstacles</sub></td>
-      <td align="center"><img src="./media/obstacles - video cut before slowly turned around box.gif" width="500"/><br/><sub>Slow obstacle negotiation (recording truncated)</sub></td>
+      <td align="center"><img src="./media/obstacles - didnt make it around the corner.gif" width="300"/><br/><sub>Cornering failure with obstacles</sub></td>
+      <td align="center"><img src="./media/obstacles - video cut before slowly turned around box.gif" width="300"/><br/><sub>Slow obstacle negotiation (recording truncated)</sub></td>
     </tr>
   </table>
 </p>
