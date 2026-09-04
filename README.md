@@ -3,8 +3,31 @@
 A comprehensive, semester-long engineering project to design, implement, and validate a full-stack autonomous vehicle system. This repository documents the complete development lifecycle—from embedded Linux configuration and ROS integration to sensor fusion, state estimation, and model-predictive control—culminating in a functional autonomous vehicle capable of real-time environment perception and navigation.
 
 <p align="center">
-  <img src="./media/lab7_autonomous_driving.gif" alt="Autonomous Driving Demo" width="600"/>
+  <table>
+    <tr>
+      <td align="center"><img src="./media/no obstacles - success.gif" alt="Autonomous Driving Demo without Obstacles" width="750"/><br/><sub>Smooth hallway traversal</sub></td>
+      <td align="center"><img src="./media/obstacles - success.gif" alt="Autonomous Driving Demo with Obstacles" width="750"/><br/><sub>Obstacle avoidance in motion</sub></td>
+    </tr>
+  </table>
 </p>
+
+<!-- <p align="center">
+  <table>
+    <tr>
+      <td align="center"><img src="./media/no obstacles - success.gif" alt="Autonomous Driving Demo without Obstacles" width="500"/><br/><sub>Smooth hallway traversal</sub></td>
+      <td align="center"><img src="./media/obstacles - success.gif" alt="Autonomous Driving Demo with Obstacles" width="500"/><br/><sub>Obstacle avoidance in motion</sub></td>
+    </tr>
+  </table>
+</p> -->
+
+<!-- <p align="center">
+  <img src="./media/no obstacles - success.gif" alt="Autonomous Driving Demo without Obstacles" width="750"/>
+</p>
+<p align="center">
+      <img src="./media/obstacles - success.gif" alt="Autonomous Driving Demo with Obstacles" width="500"/>
+</p> -->
+
+
 *The MacAEV navigating autonomously using a virtual barriers algorithm with Quadratic Programming optimization, successfully following a hallway and avoiding obstacles.*
 
 ---
@@ -70,11 +93,6 @@ The McMaster AEV is a custom-built, rear-wheel-drive differential-steer platform
 - **Simulation:** F1TENTH Simulator (Gazebo-based)
 - **Debugging & Profiling:** `rqt_graph`, `rqt_plot`, `rostopic`, `rosnode`, `rviz`
 
-<p align="center">
-  <img src="./media/overview_flowchart.png" alt="Software Pipeline Flowchart" width="700"/>
-</p>
-*Figure: ROS computation graph showing the modular architecture and data flow between nodes.*
-
 ## ⚙️ Technical Deep Dive: Algorithms & Implementation
 
 ### Motor Control & Characterization
@@ -134,7 +152,98 @@ The McMaster AEV is a custom-built, rear-wheel-drive differential-steer platform
   The distance between the lines is $d = \frac{2}{\sqrt{w^T w}}$, which is maximized by minimizing $w^T w$.
 - **Solver:** Used the `quadprog` library, implementing Goldfarb and Idnani's active set method for solving convex QPs.
 
-## 🏁 Final System Performance
+
+## 🧪 Simulation & Algorithm Development
+
+Before deploying on the physical vehicle, all algorithms were rigorously tested in the F1TENTH simulation environment. This allowed for rapid iteration and parameter tuning without risking hardware damage.
+
+### Environment Mapping & Occupancy Grid
+
+The occupancy grid mapping algorithm was first validated in simulation. The following image shows the grid-based map generated using log-odds Bayesian updates from simulated LiDAR scans.
+
+<p align="center">
+  <img src="./media/simulation environment testing.png" alt="Occupancy Grid Mapping in Simulation" width="750"/>
+</p>
+*Figure: Occupancy grid map generated in simulation using log-odds Bayesian updates.*
+
+### Virtual Wall-Following & Line Barrier Algorithms
+
+Two autonomous navigation strategies were developed and tested:
+
+1. **Wall-Following (Distance-Based):** A feedback-linearized PD controller that maintains the vehicle centered between two walls by tracking the distances to the left and right walls.
+
+2. **Virtual Barriers (QP-Based):** An advanced algorithm that formulates and solves a Quadratic Programming problem to find two parallel lines that maximize the safe corridor while separating the vehicle from obstacles.
+
+Both algorithms were tested on various simulated maps:
+
+<p align="center">
+  <table>
+    <tr>
+      <td align="center"><img src="./media/berlin.png" width="300"/><br/><sub>Berlin map - urban environment testing</sub></td>
+      <td align="center"><img src="./media/stata_basement.png" width="300"/><br/><sub>Stata Basement map - indoor corridor testing</sub></td>
+    </tr>
+  </table>
+</p>
+
+### LiDAR Perception & Real-Time Visualization
+
+The simulation environment provided real-time visualization of the vehicle's perception system. The colorful points represent LiDAR returns, color-coded by distance:
+
+- **Red/Orange:** Close obstacles (high priority)
+- **Yellow/Green:** Mid-range obstacles
+- **Blue/Purple:** Distant obstacles
+
+<p align="center">
+  <table>
+    <tr>
+      <td align="center"><img src="./media/racecar_simulator_rviz_1.png" width="500"/><br/><sub>LiDAR perception in open environment</sub></td>
+      <td align="center"><img src="./media/racecar_simulator_rviz_2.png" width="500"/><br/><sub>LiDAR perception in corridor environment</sub></td>
+    </tr>
+  </table>
+</p>
+
+### Simulation-to-Reality Transfer
+
+Testing in simulation revealed several insights that guided the final implementation:
+
+| Simulation Finding | Real-World Impact |
+|-------------------|-------------------|
+| Aggressive centering caused corner overshoot | Damping gains were reduced for smoother cornering |
+| Wall-following worked well in straight corridors | Added virtual barriers for obstacle-rich environments |
+| LiDAR noise in simulation required filtering | Real-world LiDAR data required additional preprocessing |
+| Occupancy grid updates at 10Hz were sufficient | Same update rate used on physical hardware |
+
+This sim-to-real workflow significantly accelerated development and reduced debugging time on the physical vehicle.
+
+## 🏁 Final System Results & Performance
+
+The project successfully achieved its major milestones, culminating in a fully functional autonomous vehicle.
+
+### Final Results
+
+<p align="center">
+  <table>
+    <tr>
+      <td align="center"><img src="./media/no obstacles - success.gif" width="250"/><br/><sub>Smooth hallway traversal</sub></td>
+      <td align="center"><img src="./media/obstacles - success.gif" width="250"/><br/><sub>Obstacle avoidance in motion</sub></td>
+    </tr>
+  </table>
+</p>
+
+### Bloopers & Iterative Learnings Along the Way
+
+<p align="center">
+  <table>
+    <tr>
+      <td align="center"><img src="./media/no obstacles - quick to get to middle, failed corner turn.gif" width="250"/><br/><sub>Aggressive centering, corner overshoot</sub></td>
+      <td align="center"><img src="./media/no obstacles - slow big turn around corner.gif" width="250"/><br/><sub>Conservative wide-radius cornering</sub></td>
+      <td align="center"><img src="./media/obstacles - didnt make it around the corner.gif" width="250"/><br/><sub>Cornering failure with obstacles</sub></td>
+      <td align="center"><img src="./media/obstacles - video cut before slowly turned around box.gif" width="250"/><br/><sub>Slow obstacle negotiation (recording truncated)</sub></td>
+    </tr>
+  </table>
+</p>
+
+### Achieved Capabilities
 
 The MacAEV successfully demonstrates the following capabilities:
 
@@ -202,6 +311,7 @@ This project developed a comprehensive and highly transferable set of technical 
 - **Depth Camera Integration:** Use the RealSense RGB-D camera to enhance obstacle detection, particularly for low-lying objects outside the LiDAR plane.
 
 ## 🙏 Acknowledgements
+
 - **Dr. Berker Bilgin** & **Dr. Shahin Sirouspour** for their guidance and support throughout this challenging project.
 - **F1TENTH Community:** For the excellent open-source simulator and packages that served as a foundation for our work.
 
