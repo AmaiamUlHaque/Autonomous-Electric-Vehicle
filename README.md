@@ -1,6 +1,6 @@
 # Autonomous Electric Vehicle Project
 
-A comprehensive, semester-long engineering project to design, implement, and validate a full-stack autonomous vehicle system. This repository documents the complete development lifecycle—from embedded Linux configuration and ROS integration to sensor fusion, state estimation, and model-predictive control—culminating in a functional autonomous vehicle capable of real-time environment perception and navigation.
+A comprehensive, semester-long engineering project to design, implement, and validate a full-stack autonomous vehicle system. This repository documents the complete development lifecycle, from embedded Linux configuration and ROS integration to sensor fusion, state estimation, and model-predictive control, culminating in a functional autonomous vehicle capable of real-time environment perception and navigation.
 
 <p align="center">
   <table>
@@ -12,7 +12,6 @@ A comprehensive, semester-long engineering project to design, implement, and val
     </tr>
   </table>
 </p>
-
 
 *The MacAEV navigating autonomously using a virtual barriers algorithm with Quadratic Programming optimization, successfully following a hallway and avoiding obstacles.*
 
