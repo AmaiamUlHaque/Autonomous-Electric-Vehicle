@@ -26,15 +26,16 @@ A comprehensive, semester-long engineering project to design, implement, and val
     - [State Estimation & Localization](#state-estimation--localization)
     - [Mapping & Environment Perception](#mapping--environment-perception)
     - [Autonomous Navigation & Control](#autonomous-navigation--control)
-4. [🏁 Final System Performance](#-final-system-performance)
-5. [📚 Technical Skills & Competencies](#-technical-skills--competencies)
+4. [🧪 Simulation & Algorithm Development](#-simulation--algorithm-development)
+5. [🏁 Final System Performance](#-final-system-performance)
+6. [📚 Technical Skills & Competencies](#-technical-skills--competencies)
     - [Software Engineering & Systems Architecture](#software-engineering--systems-architecture)
     - [Robotics & Control Theory](#robotics--control-theory)
     - [Embedded Systems & Hardware Integration](#embedded-systems--hardware-integration)
     - [Data Science & Algorithmic Thinking](#data-science--algorithmic-thinking)
     - [Engineering Project Management](#engineering-project-management)
-6. [🔭 Future Work & Optimization](#-future-work--optimization)
-7. [🙏 Acknowledgements](#-acknowledgements)
+7. [🔭 Future Work & Optimization](#-future-work--optimization)
+8. [🙏 Acknowledgements](#-acknowledgements)
 
 ---
 
