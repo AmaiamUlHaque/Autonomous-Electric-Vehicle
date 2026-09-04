@@ -99,8 +99,11 @@ The McMaster AEV is a custom-built, rear-wheel-drive differential-steer platform
 
 ### State Estimation & Localization
 - **Wheel Odometry:** Implemented a dead-reckoning system using the vehicle's kinematic model (Ackermann steering). The pose update equations were:
+
   $x_{k+1} = x_k + v_s \cdot \Delta t \cdot \cos(\theta_k)$
+
   $y_{k+1} = y_k + v_s \cdot \Delta t \cdot \sin(\theta_k)$
+  
   $\theta_{k+1} = \theta_k + \frac{v_s}{l} \cdot \tan(\delta) \cdot \Delta t$
 - **IMU-Augmented Odometry:** To mitigate drift from the kinematic model, the IMU yaw measurement replaced the calculated $\theta$ from the kinematic integration. This provides a more accurate and stable heading estimate, essential for long-term navigation.
 - **Euler Integration:** Implemented discrete-time integration using a fixed time step ($\Delta t$) from VESC state messages.
